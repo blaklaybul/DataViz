@@ -27,50 +27,18 @@
 \begin{document}
 
 \begin{flushright}
-	\textit{Unsupervised Language Learning, Michael Hirsch, Feb $2^{nd}$ 2015}
+	\textit{InfoViz, Michael Hirsch, Feb $2^{nd}$ 2015}
 \end{flushright}
 
-This course: discuss recent advances in computational methods to learn language from unlabeled data. Focus on syntax and semantics. Relevance for cognitive science and language technology in the back of our minds. 
+\section{History}
+Old field. Cave paintings were first, looked at world and made exact picture. William Playfair. How do we choose to be represent our data? What are the underlying principles. Edward Tufte, the visual display of quantitative information. Readings in Information Visualization, Using Vision to Think.
 
-\begin{itemize}
-	\item Part 1: Expectation Maximization methods. Probabilistic context free grammar formalism.
-	\item Part 2: nonparametric bayesian methods. 
-	\item Part 3: deep learning/backprop. very recent, factorial representation
-	\item anaphora resolution: the use of a word referring to or replacing a word used earlier in a sentence, to avoid repetition.
-	\item machine translation
-\end{itemize}
+Some definions
 
-Let's make us of the vast amount of unannotated data that we have available to us, particularly on the web. \textbf{grammar induction}.
-Start with raw text, learn syntactic structure. 
+\begin{mydef}
+Information visualization: a mapping between discrete data and visual representation. communication of abstract data through the use of interactive visual interfaces. utilizes computer graphics and interaction to assist humans in solving problems.
+\end{mydef}
 
-\begin{itemize}
-	\item Gold, Chomsky say that inducing grammar from unlabeled examples is impossible.
-	\item others think that it is possible, but it is a very hard problem. People have been trying to use clever algorithms.
-	\item heuristic approaches
-\end{itemize}
-
-Child Corpus, combinatorial apparatus behind natural language.
-Syntactic categories of natural language are promiscuous, recursive nature of natural language. It allows the embedding of syntactic constituents in any other categories.
-Human vs. Animal Communication:: Bonobo Kanzi, Border Collie Rico. Human infants learn $\approx 10$ words a day between 2 and 6 years. $\approx 14000$ words at age 6, $\approx 60000$ words at age 12. Why do humans have such an incredible ability to learn words so quickly? Also, what about their combinatorial ability? WHat is required for an algorithm to become successful of this task?
-
-``Time flies like an arrow'' vs ``fruit flies like a banana'': surface structure is the same, underlying syntactic structure is very different. 
-
-Why unsupervised?
-\begin{itemize}
-	\item syntactically annotated corpora. 1 years worth of the Wall Street Journal and 38k sentences, $\approx 1$mil words. Gave it to linguists and annotated all of the sentences.
-	\item unannotated corpora: the internet, google's ngram corpora.
-\end{itemize}
-
-Distributions in natural language are so skewed. A small number of extremely frequent items and an incredibly large number of infrequent items. 
-
-\subsection{Expectation Maximization}
-
-Algorithm workhorse, a clustering problem. K-means clustering, an unsupervised clustering algorithm. Take K means $\mu_{k}$ and assign each point in the feature space to closest mean. Then reposition means of the new clusters. This allows each point to only be in one clusters, lets mix by using a mixture of Gaussians. Take a bunch of gaussians and put them over the clusters - the prob that each point receives is a weihted sum of the probabilities that its one of several gaussians.
-
-E step: generating annotations to the data that we wish were there in the first place. Try to identify which cluster the data came form. We have to guess. We create pseudo data, by generating labels that we didnt have.
-
-M step: forget that the data was made up. We recompute the means of our clusters by taking the weighted average of all the data points weight by their responsibility scores and putting the mean there. 
-
-A method used when we have a model with latent variables (values we don't know, but estimate with each step.)
+Data visualization usually deals with quantitative data, information visualization tries to represent \textit{abstract} data. Information design starts with data that already has a clear structure. With information visualization, we first need to discover the structure, and a visualization is successful if it reveals the structure. 
 
 \end{document}
