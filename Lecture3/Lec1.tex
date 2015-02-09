@@ -1,0 +1,85 @@
+\documentclass[]{article}
+
+\usepackage{amssymb,latexsym,amsmath,amsthm}     % Standard packages
+
+
+%%%%%%%%%%%
+% Margins %
+%%%%%%%%%%%
+\addtolength{\textwidth}{1.0in}
+\addtolength{\textheight}{1.00in}
+\addtolength{\evensidemargin}{-0.75in}
+\addtolength{\oddsidemargin}{-0.75in}
+\addtolength{\topmargin}{-.50in}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Theorem/Proof Environments %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newtheorem*{myax}{Axiom}
+\newtheorem*{mynot}{Notation}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{myrem}{Remark}[section]
+\newtheorem{mydef}{Definition}[section]
+
+
+% Document %
+\begin{document}
+
+\begin{flushright}
+	\textit{InfoViz, Michael Hirsch, Feb $2^{nd}$ 2015}
+\end{flushright}
+
+\section{History}
+Old field. Cave paintings were first, looked at world and made exact picture. William Playfair. How do we choose to be represent our data? What are the underlying principles. Edward Tufte, the visual display of quantitative information. Readings in Information Visualization, Using Vision to Think.
+
+Some definions
+
+\begin{mydef}
+Information visualization: a mapping between discrete data and visual representation. communication of abstract data through the use of interactive visual interfaces. utilizes computer graphics and interaction to assist humans in solving problems.
+\end{mydef}
+
+Data visualization usually deals with quantitative data, information visualization tries to represent \textit{abstract} data. Information design starts with data that already has a clear structure. With information visualization, we first need to discover the structure, and a visualization is successful if it reveals the structure. 
+
+\textbf{Reduction} : data is aggregated into structures which are visualized.
+\textbf{Spatial Layout}
+
+\section{Data Types}
+
+\textbf{Basic Data Types}
+\begin{itemize}
+\setlength\itemsep{0em}
+	\item 1,2,3 dimensional
+	\item mutli-dimenstional
+	\item temporal
+	\item tree
+	\item network
+	\item text, audio, image, video
+\end{itemize}
+
+\textbf{Our Data Types}
+\begin{itemize}
+\setlength\itemsep{0em}
+	\item Qualitative: categorical / nominal variables. 
+	\item Qualitative: ordinal variables are categorical with an order
+	\item Qualitative: Interval variables.. differences can be compared
+	\item Quantitative: Geophysical
+	\item time: quantitative and ordinal terms
+	\item structures: undirected graphs, directed graphs, trees, blah blah
+\end{itemize}
+
+
+\textbf{Info Viz Tasks}
+\begin{itemize}
+\setlength\itemsep{0em}
+	\item overview of data
+	\item zoom zoom in on item of interest
+	\item  filter filer out uninteresting items
+	\item details on demand: show details of one or more items
+	\item relate
+	\item more
+\end{itemize}
+
+\section{What is a good dataset?}
+
+\end{document}
