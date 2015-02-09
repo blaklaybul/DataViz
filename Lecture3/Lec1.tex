@@ -27,59 +27,32 @@
 \begin{document}
 
 \begin{flushright}
-	\textit{InfoViz, Michael Hirsch, Feb $2^{nd}$ 2015}
+	\textit{InfoViz, Michael Hirsch, Feb $9^{th}$ 2015}
 \end{flushright}
 
-\section{History}
-Old field. Cave paintings were first, looked at world and made exact picture. William Playfair. How do we choose to be represent our data? What are the underlying principles. Edward Tufte, the visual display of quantitative information. Readings in Information Visualization, Using Vision to Think.
+\section{Graphs Networks and Trees}
 
-Some definions
+Mostly from: Visual Analysis of Large Graphs
 
-\begin{mydef}
-Information visualization: a mapping between discrete data and visual representation. communication of abstract data through the use of interactive visual interfaces. utilizes computer graphics and interaction to assist humans in solving problems.
-\end{mydef}
+...recall Schneiderman Data Types.
 
-Data visualization usually deals with quantitative data, information visualization tries to represent \textit{abstract} data. Information design starts with data that already has a clear structure. With information visualization, we first need to discover the structure, and a visualization is successful if it reveals the structure. 
+A \textbf{graph} is a set of nodes with a set of edges (relations) between them. We have directed graphs and undirected graphs. Nodes and edges can also be characterized differently using edge/node types. Colors, shapes, etc. The nodes and edges can also have different weights, size is a good indicator of this. A \textbf{tree} is a special case of a graph in which any two of the nodes are connected by exactly one path. No cycles also. 
 
-\textbf{Reduction} : data is aggregated into structures which are visualized.
-\textbf{Spatial Layout}
+In graph theory, a network is a directed graph with weighted edge. In info viz, a network is any graph with attributes associated to nodes and edges. A minimum spanning tree is a subset of a graph connecting all vertices of a graph. \textbf{compound graphs} are a way of grouping nodes together to create a tree structure.
 
-\section{Data Types}
+\textbf{Dynamic Graphs}. These can evolve over time, with changes occuring in atttributes of nodes, edges, structure, or combinations of these. The \textit{data} is changing. 
 
-\textbf{Basic Data Types}
-\begin{itemize}
-\setlength\itemsep{0em}
-	\item 1,2,3 dimensional
-	\item mutli-dimenstional
-	\item temporal
-	\item tree
-	\item network
-	\item text, audio, image, video
-\end{itemize}
+\textbf{Topological properties:} graph size - the number of nodes. Graph density - number of edges. Sparse graphs have few edges, complete graphs have everything connected, cliques are a subset of a graph which is fully connected.
 
-\textbf{Our Data Types}
-\begin{itemize}
-\setlength\itemsep{0em}
-	\item Qualitative: categorical / nominal variables. 
-	\item Qualitative: ordinal variables are categorical with an order
-	\item Qualitative: Interval variables.. differences can be compared
-	\item Quantitative: Geophysical
-	\item time: quantitative and ordinal terms
-	\item structures: undirected graphs, directed graphs, trees, blah blah
-\end{itemize}
+So what is a large graph? In algorithmic analysis, this means long computation times or a large memory footprint. In info viz, this means anything leading to cluttered displays. A question we ask is \textit{how can we reduce the size of our graph?}.
 
+We look at the degree of the notes. Graph filtering: stochastic sampling - randomly remove nodes or edges from graph. Geodesic clustering: looks at structure of graph and tries to keep connection information and throwing away duplicate information. Structure based filtering: remove any edges so long as elements remain connected.	
 
-\textbf{Info Viz Tasks}
-\begin{itemize}
-\setlength\itemsep{0em}
-	\item overview of data
-	\item zoom zoom in on item of interest
-	\item  filter filer out uninteresting items
-	\item details on demand: show details of one or more items
-	\item relate
-	\item more
-\end{itemize}
+\textit{visual representation of a graph}. where do we put the nodes, how do we draw the nodes, and how to we display the edges?
 
-\section{What is a good dataset?}
+Is our graph planar? That is, can we draw the graphs in such a way to ensure that no edges overlap. There are algorithms for finding these, and then algos for fixing. We have aesthetic rules: Reduce visual clutter, reduce spatial aliases, spatial matching of multiple representatives, maximize compactness. For dynamic data: preserving the mental map, reducing the cognitive load, minimizing temporal aliases. Scalability, in number of vertices, edges, and graphs.
 
+Predictability. Two different runs of the same algorithm on the same graph should yield identical results. 
+
+Node-link diagrams: for geo data, each node has a position which is determined by the data. For other data, we are free to place the points in any position. Optimal positions are determined by the various aesthetic criteria. 
 \end{document}
