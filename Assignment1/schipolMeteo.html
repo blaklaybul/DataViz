@@ -44,7 +44,7 @@
     
   
     var margin = {top: 20, right: 20, bottom: 90, left: 40};
-    var w = 1400 - margin.left - margin.right;
+    var w = 900 - margin.left - margin.right;
     var h = 500 - margin.top - margin.bottom;
 
 		var barPadding = 1;
@@ -88,11 +88,16 @@
         d.temperature = +d.values/10;
      });
   
+  var clickCount = 0;
+  var newAgg = [];
 
-  xScale.domain(agg.map(function(d) { return d.date; }));
-  yScale.domain([d3.min(agg,function(d){ return d.temperature-2;}), d3.max(agg, function(d) { return d.temperature; })]);
+  for(var i = 0; i<12;i++){
+  newAgg.push(agg[i]);};
 
-  
+  xScale.domain(newAgg.map(function(d) { return d.date; }));
+  yScale.domain([d3.min(newAgg,function(d){ return d.temperature-2;}), d3.max(newAgg, function(d) { return d.temperature; })]);
+
+  console.log(newAgg);
 
   svg.append("g")
       .attr("class", "x axis")
@@ -115,7 +120,7 @@
       .text("avg temp (C)");
 
   svg.selectAll("rect")
-      .data(agg)
+      .data(newAgg)
     .enter().append("rect")
       .attr("class", "bar")
       .attr("x", function(d) { return xScale(d.date); })
@@ -128,7 +133,7 @@
       });
 
   svg.selectAll("bar")
-    .data(agg)
+    .data(newAgg)
     .enter()
     .append("text")
     .text(function(d){return d3.round(d.temperature,1);})
@@ -138,10 +143,23 @@
     .attr("font-size", "8px")
     .attr("fill", "black");
    
-    
+    d3.select("body")
+    .on("keydown", function() {
+        svg.append("text")
+            .attr("x","5")
+            .attr("y","150")
+            .style("font-size","50px")
+            .text("keyCode: " + d3.event.keyCode)  
+          .transition().duration(2000)
+            .style("font-size","5px")
+            .style("fill-opacity",".1")
+          .remove();
+    });
 
 
 });
+
+
 
 
 
