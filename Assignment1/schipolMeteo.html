@@ -87,8 +87,6 @@
         d.date = parseDate(d.key);
         d.temperature = +d.values/10;
      });
-
-     console.log(agg);
   
 
   xScale.domain(agg.map(function(d) { return d.date; }));
