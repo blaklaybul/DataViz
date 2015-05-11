@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<style>
+
+body {
+  font: 10px sans-serif;
+}
+
+
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.x.axis path {
+  display: none;
+}
+
+.line {
+  fill: none;
+  stroke: crimson;
+  stroke-width: 1.5px;
+}
+
+.area {
+  fill: #e7e7e7;
+}
+
+body {
+  background-color: white;
+}
+
+
+</style>
+<body>
+  <div><Span><h2>Historical Weighted Averages of Scores </h2> </span></div>
+  <div><Span><p>The weighted average of the scores is calculated on a daily basis. Today's data is then compared to the distribution of weighted averages, and its z-score is shown. Green values represent small scores, and red values, large.<p> </span></div>
+  <script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+<script src = "d3/d3.v3.min.js" type = "text/Javascript"></script>
+<script>
+
+var margin = {top: 20, right: 40, bottom: 30, left: 50},
+    width = 600 - margin.left - margin.right,
+    height = 120 - margin.top - margin.bottom;
+
+var parseDate = d3.time.format("%Y/%m/%d").parse;
+
+var x = d3.time.scale()
+    .range([0, width]);
+
+var color = d3.scale.quantize()
+.domain([3,0])
+.range(colorbrewer.RdYlGn[9]);
+
+var perc = d3.format("%");
+
+var y = d3.scale.linear()
+    .range([height, 0])
+    .domain([0,1000]);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .ticks(12)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .orient("left")
+    .ticks(3)
+    .tickFormat(d3.format("g"));
+
+var area = d3.svg.area()
+    .x(function(d) { return x(d.date); })
+    .y0(height)
+    .y1(function(d) { return y(d.wavg_score); });
+
+var line = d3.svg.line()
+  .interpolate("cardinal")
+  .x(function(d){return x(d.date);})
+  .y(function(d) {return y(d.wavg_score);})
+
+
+d3.csv("scores.csv", function(error, data) {
+  data.forEach(function(d){
+        d.date=parseDate(d.date);
+        d.wavg_score = +d.wavg_score
+        d.type = d.type;
+        });
+
+  var types = d3.nest()
+    .key(function(d){return d.type;})
+    .entries(data);
+
+
+   x.domain([d3.min(types,function(d){return d.values[0].date;}),d3.max(types, function(d){return d.values[d.values.length-1].date;})]);
+
+   var svg = d3.select("body").selectAll("svg").data(types).enter()
+    .append("svg")
+    .attr()
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    
+    var g = svg.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .each(function(types) { check = []; for (var i = 0 ; i < types.values.length; i++){check.push(types.values[i].wavg_score);}
+        types.y = d3.scale.linear()
+            .domain([0  //change yscale here
+              , 1000])
+            .range([height, 0])});
+
+  g.append("g")
+      .attr("class", "x axis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis);
+
+  
+
+
+lines = g.append("g")
+
+ lines.append("path")
+      .attr("class", "area")
+      .attr("pointer-events", "none")
+      .attr("d", function(symbol) {
+        return d3.svg.area()
+            .x(function(d) { return x(d.date); })
+            .y1(function(d) { return symbol.y(d.wavg_score); })
+            .y0(height)
+            (symbol.values);
+      });
+
+  lines.append("path")
+      .attr("class", "line")
+      .style("pointer-events", "none")
+      .attr("d", function(symbol) {
+        return d3.svg.line()
+            .x(function(d) { return x(d.date); })
+            .y(function(d) { return symbol.y(d.wavg_score); })
+            (symbol.values);
+      });
+
+var today_data = svg.append("g")
+  .attr("transform", "translate(465, 0 )");
+
+  today_data.append("text")
+      .attr("x", 65)
+      .attr("y", 80)
+      .style("fill", function(symbol) {
+
+        scores = []
+        std = []
+
+            for (var i = 0 ; i<symbol.values.length-1; i++){
+                scores.push(symbol.values[i].wavg_score);
+            }
+          
+          
+          sum = scores.reduce(function(a,b){return a + b;});
+          
+          old_avg = Math.round(sum/scores.length);
+
+          for (var i = 0 ; i<symbol.values.length-1; i++){
+                std.push(Math.pow(symbol.values[i].wavg_score - old_avg,2));
+            }
+
+          stdsum = std.reduce(function(a,b){return a + b;});
+          popstd = Math.sqrt(stdsum);
+          today = Math.round(symbol.values[symbol.values.length-1].wavg_score);
+          zscore = ((today - old_avg) / popstd);
+         
+          return color(Math.abs(zscore));
+
+
+      
+        })
+      .style("font-weight", "bold")
+      .style("text-anchor", "middle")
+      .style("font-size","16px")
+      .text(function(symbol) { 
+          scores = []
+        std = []
+
+            for (var i = 0 ; i<symbol.values.length-1; i++){
+                scores.push(symbol.values[i].wavg_score);
+            }
+          
+          
+          sum = scores.reduce(function(a,b){return a + b;});
+          
+          old_avg = Math.round(sum/scores.length);
+
+          for (var i = 0 ; i<symbol.values.length-1; i++){
+                std.push(Math.pow(symbol.values[i].wavg_score - old_avg,2));
+            }
+
+          stdsum = std.reduce(function(a,b){return a + b;});
+          popstd = Math.sqrt(stdsum);
+          
+          today = Math.round(symbol.values[symbol.values.length-1].wavg_score);
+          zscore = ((today - old_avg) / popstd)
+          return zscore.toFixed(2);
+
+      });
+
+  today_data.append("text")
+      .attr("x", 20)
+      .attr("y", 80)
+      .style("fill", "black")
+      .style("font-weight", "")
+      .style("text-anchor", "middle")
+      .style("font-size","16px")
+      .text(function(symbol) { return Math.round(symbol.values[symbol.values.length-1].wavg_score); });
+
+  g.append("text")
+      .attr("x",  10)
+      .attr("y",  height - 10)
+      .style("text-anchor", "end")
+      .style("font-weight", "bold")
+      .style("font-size","12px")
+      .style("text-anchor", "start")
+      .text(function(symbol) { return symbol.key; });
+
+g.append("g")
+      // Hide y axis
+      .attr("class", "y axis")
+      .call(yAxis);
+  
+
+});
+
+</script>
+</body>
+  </html>
