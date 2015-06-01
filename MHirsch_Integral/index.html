@@ -16,14 +16,10 @@ body {
   shape-rendering: crispEdges;
 }
 
-.x.axis path {
-  display: none;
-}
-
 .line {
   fill: none;
   stroke: crimson;
-  stroke-width: 1.5px;
+  stroke-width: 1.75px;
 }
 
 .area {
@@ -48,19 +44,11 @@ var margin = {top: 20, right: 40, bottom: 30, left: 50},
     height = 120 - margin.top - margin.bottom;
 
 var parseDate = d3.time.format("%Y/%m/%d").parse;
-
-var x = d3.time.scale()
-    .range([0, width]);
-
-var color = d3.scale.quantize()
-.domain([3,0])
-.range(colorbrewer.RdYlGn[9]);
-
 var perc = d3.format("%");
 
-var y = d3.scale.linear()
-    .range([height, 0])
-    .domain([0,1000]);
+var color = d3.scale.quantize().domain([3,0]).range(colorbrewer.RdYlGn[9]);
+var x = d3.time.scale().range([0, width]);
+var y = d3.scale.linear().range([height, 0]).domain([0,1000]);
 
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -81,7 +69,7 @@ var area = d3.svg.area()
 var line = d3.svg.line()
   .interpolate("cardinal")
   .x(function(d){return x(d.date);})
-  .y(function(d) {return y(d.wavg_score);})
+  .y(function(d){return y(d.wavg_score);});
 
 
 d3.csv("scores.csv", function(error, data) {
@@ -95,56 +83,54 @@ d3.csv("scores.csv", function(error, data) {
     .key(function(d){return d.type;})
     .entries(data);
 
+  console.log(types);
+
 
    x.domain([d3.min(types,function(d){return d.values[0].date;}),d3.max(types, function(d){return d.values[d.values.length-1].date;})]);
 
    var svg = d3.select("body").selectAll("svg").data(types).enter()
     .append("svg")
-    .attr()
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     
     var g = svg.append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
-    .each(function(types) { check = []; for (var i = 0 ; i < types.values.length; i++){check.push(types.values[i].wavg_score);}
+    .each(function(types) 
+        {
         types.y = d3.scale.linear()
-            .domain([0  //change yscale here
-              , 1000])
-            .range([height, 0])});
+            .domain([0, 1000])
+            .range([height, 0])
+        });
 
-  g.append("g")
+    g.append("g")
       .attr("class", "x axis")
       .attr("transform", "translate(0," + height + ")")
       .call(xAxis);
 
-  
+     
+     lines = g.append("g")
 
+     lines.append("path")
+          .attr("class", "area")
+          .attr("d", function(symbol) {
+            return d3.svg.area()
+                .x(function(d) { return x(d.date); })
+                .y1(function(d) { return symbol.y(d.wavg_score); })
+                .y0(height)
+                (symbol.values);
+          });
 
-lines = g.append("g")
+      lines.append("path")
+          .attr("class", "line")
+          .attr("d", function(symbol) {
+            return d3.svg.line()
+                .x(function(d) { return x(d.date); })
+                .y(function(d) { return symbol.y(d.wavg_score); })
+                (symbol.values);
+          });
 
- lines.append("path")
-      .attr("class", "area")
-      .attr("pointer-events", "none")
-      .attr("d", function(symbol) {
-        return d3.svg.area()
-            .x(function(d) { return x(d.date); })
-            .y1(function(d) { return symbol.y(d.wavg_score); })
-            .y0(height)
-            (symbol.values);
-      });
-
-  lines.append("path")
-      .attr("class", "line")
-      .style("pointer-events", "none")
-      .attr("d", function(symbol) {
-        return d3.svg.line()
-            .x(function(d) { return x(d.date); })
-            .y(function(d) { return symbol.y(d.wavg_score); })
-            (symbol.values);
-      });
-
-var today_data = svg.append("g")
-  .attr("transform", "translate(465, 0 )");
+  var today_data = g.append("g")
+    .attr("transform", "translate(420, -20 )");
 
   today_data.append("text")
       .attr("x", 65)
